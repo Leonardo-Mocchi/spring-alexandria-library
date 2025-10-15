@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="~{fragments/layout :: head}"></th:block>
+    <title>Our books</title>
+</head>
+
+<body>
+
+    <th:block th:replace="~{fragments/layout :: navbar('books')}"></th:block>
+
+    <div class="container">
+        <h1>Books</h1>
+
+        <hr>
+
+        <!-- <p th:text="${books}"></p> // .toString() automatico quando specificato nel model-->
+
+        <section class="row">
+            <div class="col-12">
+                <table class="table" th:if="${books.size() > 0}">
+                    <thead>
+                        <tr>
+                            <th>ISBN</th>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Publisher</th>
+                            <th>Date</th>
+                            <th>Copies</th>
+                            <!-- <th></th>
+                            <th></th>
+                            <th></th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="book : ${books}" th:object="${book}">
+                            <td>[[*{isbn}]]</td>
+                            <td>[[*{title}]]</td>
+                            <td>[[*{author}]]</td>
+                            <td>[[*{publisher}]]</td>
+                            <td>[[*{publicationDate}]]</td>
+                            <td>[[*{numberOfCopies}]]</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+                <p th:unless="${books.size() > 0}" th:text="No books are available at the moment..."></p>
+            </div>
+
+        </section>
+
+
+    </div>
+
+    <th:block th:replace=" ~{fragments/layout :: popper}">
+    </th:block>
+</body>
+
+</html>

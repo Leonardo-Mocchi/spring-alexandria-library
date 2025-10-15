@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="~{fragments/layout :: head}" />
+    <title>Book: [[${book.title}]]</title>
+</head>
+
+<body>
+
+    <th:block th:replace="~{fragments/layout :: navbar('books')}" />
+
+    <main class="container mt-5" th:object="${book}">
+
+        <section class="row">
+            <div class="col-12">
+                <h1 class=" fw-bold mb-3">[[*{title}]]</h1>
+                <h2 class="mb-3">Written by: [[*{author}]]</h2>
+                <h3 class="mb-3">Published by: [[*{publisher}]]</h3>
+                <h4 class="mb-3">ISBN: <span class="font-monospace">[[*{isbn}]]</span></h4>
+                <h5 class="mb-3">Publication date: [[*{publicationDate}]]</h5>
+                <p class="mb-3">Number of Copies: [[*{numberOfCopies}]]</p>
+
+                <hr>
+
+                <p th:text="*{synopsis}" />
+
+                <div class="mt-5 pt-5">
+                    <hr>
+                    <p th:text="${book}"></p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    <th:block th:replace=" ~{fragments/layout :: popper}" />
+</body>
+
+</html>
