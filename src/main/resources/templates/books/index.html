@@ -54,11 +54,57 @@
                                 <a class="btn btn-success btn-sm" th:href="@{/books/edit/{id}(id=*{id})}">Edit</a>
                             </td>
                             <td>
+                                <!--? Form senza modale,con semplice "bottone"  
                                 <form th:action="@{/books/delete/{id}(id=*{id})}" method="post" style="display:inline">
-                                    <button class="btn btn-danger" type="submit">
+                                    <button class="btn btn-danger btn-sm" type="submit">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
-                                </form>
+                                </form> -->
+
+
+                                <!-- Modal trigger button -->
+                                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" th:data-bs-target="'#delete-modal-' + *{id}">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+
+                                <!-- Modal Body -->
+                                <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
+                                <div class="modal fade" th:id="'delete-modal-' + *{id}" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="delete-modal" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title" id="modalTitleId">
+                                                    Deleting "[[*{title}]]"
+                                                </h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure you want to delete the book with title <strong>"[[*{title}]]"</strong>?
+                                            </div>
+                                            <div class="modal-footer">
+
+                                                <!--, bottone per chiudere la modale senza conseguenze  -->
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                                                <!--! vero bottone che fa partire la action di cancellazione chiamando il metodo delete  -->
+                                                <form class="d-inline-block" th:action="@{/books/delete/{id}(id=*{id})}" method="post">
+                                                    <button class="btn btn-danger" type="submit">
+                                                        Permanently delete this Book
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Optional: Place to the bottom of scripts -->
+                                <script>
+                                    const myModal = new bootstrap.Modal(
+                                        document.getElementById("delete-modal"),
+                                        options,
+                                    );
+                                </script>
+
                             </td>
                         </tr>
                     </tbody>
