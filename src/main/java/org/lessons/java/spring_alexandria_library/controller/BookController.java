@@ -25,7 +25,7 @@ public class BookController {
     @Autowired
     private BookRepository repository;
 
-    // #region READ - GET route
+    // #region READ - INDEX, PLURAL
 
     @GetMapping
     public String index(Model model) {
@@ -37,7 +37,7 @@ public class BookController {
     }
     // #endregion
 
-    // #region READ - GET > SHOW also with custom filters
+    // #region READ - SHOW, SINGULAR || also with custom filters
     @GetMapping("/{id}") // /books già specifdicato sopra in @RequestMapping!
     public String show(@PathVariable("id") Integer id, Model model) {
 
@@ -67,7 +67,7 @@ public class BookController {
     }
     // #endregion
 
-    // #region CREATE - POST route
+    // #region CREATE - CREATE + STORE
 
     @GetMapping("/create")
     public String create(Model model) {
@@ -91,7 +91,7 @@ public class BookController {
 
     // #endregion
 
-    // #region UPDATE -PATCH/PUT route
+    // #region UPDATE - EDIT + UPDATE
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Integer id, Model model) {
 
@@ -108,6 +108,18 @@ public class BookController {
 
         // ? aggiornamento del dato
         repository.save(formBook);
+
+        return "redirect:/books";
+    }
+
+    // #endregion
+
+    // #region DELETE - DELETE, permanently remove from the database
+    // , ESSENDO UNA ROTTA POST AVRÒ BISOGNO DI UN FORM !!!
+    @PostMapping("delete/{id}")
+    public String delete(@PathVariable("id") Integer id) {
+
+        repository.deleteById(id);
 
         return "redirect:/books";
     }

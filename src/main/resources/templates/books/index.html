@@ -36,7 +36,7 @@
                             <th>Copies</th>
                             <td></td>
                             <td></td>
-                            <!-- <th></th> -->
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -48,17 +48,24 @@
                             <td>[[*{publicationDate}]]</td>
                             <td>[[*{numberOfCopies}]]</td>
                             <td>
-                                <a class="btn btn-primary btn-sm" th:href="@{/books/{id} (id=*{id})}">Show</a>
+                                <a class="btn btn-primary btn-sm" th:href="@{/books/{id}(id=*{id})}">Show</a>
                             </td>
                             <td>
-                                <a class="btn btn-success btn-sm" th:href="@{/books/edit/{id} (id=*{id})}">Edit</a>
+                                <a class="btn btn-success btn-sm" th:href="@{/books/edit/{id}(id=*{id})}">Edit</a>
+                            </td>
+                            <td>
+                                <form th:action="@{/books/delete/{id}(id=*{id})}" method="post" style="display:inline">
+                                    <button class="btn btn-danger" type="submit">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     </tbody>
                 </table>
 
 
-                <p th:unless="${books.size() > 0}" th:text="No books are available at the moment..."></p>
+                <p th:unless="${books.size() > 0}" th:text="'No books are available at the moment...'"></p>
             </div>
 
         </section>
