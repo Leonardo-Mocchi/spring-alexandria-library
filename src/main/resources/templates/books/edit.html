@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="~{fragments/layout :: head}" />
+    <title>Book: [[${book.title}]]</title>
+</head>
+
+<body>
+
+    <th:block th:replace="~{fragments/layout :: navbar('books')}" />
+
+    <main class="container mt-5" th:object="${book}">
+        <section class="row">
+            <div class="col-12">
+                <th:block>
+                    <h1 class="py-4 mb-2 text-center">
+                        Updating [[${book.title}]] Informations
+                    </h1>
+                    <div class="row justify-content-center">
+                        <div class="col-8">
+
+                            <!-- * form -->
+                            <form id="book-form" th:action="@{/books/edit/{id}(id = ${book.id})}" th:object="${book}" method="post">
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="title">Title: </label>
+                                    <input class="form-control" type="text" id="title" th:field="*{title}" th:errorclass="is-invalid">
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}">
+                                        <ul>
+                                            <li th:each="error: ${#fields.errors('title')}" th:text="${error}" />
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="author">Author: </label>
+                                    <input class="form-control" type="text" id="author" th:field="*{author}" th:errorclass="is-invalid">
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('author')}">
+                                        <ul>
+                                            <li th:each="error: ${#fields.errors('author')}" th:text="${error}" />
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="publication-date">Publication date: </label>
+                                    <input class="form-control" type="date" id="publication-date" th:field="*{publicationDate}" th:errorclass="is-invalid">
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('publicationDate')}">
+                                        <ul>
+                                            <li th:each="error: ${#fields.errors('publicationDate')}" th:text="${error}" />
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="isbn">ISBN Code: </label>
+                                    <input class="form-control" type="text" id="isbn" th:field="*{isbn}" th:errorclass="is-invalid">
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('isbn')}">
+                                        <ul>
+                                            <li th:each="error: ${#fields.errors('isbn')}" th:text="${error}" />
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="publisher">Publisher: </label>
+                                    <input class="form-control" type="text" id="publisher" th:field="*{publisher}" th:errorclass="is-invalid">
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('publisher')}">
+                                        <ul>
+                                            <li th:each="error: ${#fields.errors('publisher')}" th:text="${error}" />
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="synopsis">Book Synopsis: </label>
+                                    <textarea id="synopsis" class="form-control" th:field="*{synopsis}" th:errorclass="is-invalid"></textarea>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('synopsis')}">
+                                        <ul>
+                                            <li th:each="error: ${#fields.errors('synopsis')}" th:text="${error}" />
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="number-of-copies">Number of Copies: </label>
+                                    <input class="form-control" type="number" min="0" id="number-of-copies" th:field="*{numberOfCopies}" th:errorclass="is-invalid">
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('numberOfCopies')}">
+                                        <ul>
+                                            <li th:each="error: ${#fields.errors('numberOfCopies')}" th:text="${error}" />
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <!-- * submit -->
+                                <div class="mb-3 d-flex justify-content-between">
+                                    <input type="submit" class="btn btn-primary" value="Edit book">
+                                    <input type="reset" class="btn btn-warning" value="Reset all fields">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+        </section>
+
+    </main>
+    <th:block th:replace=" ~{fragments/layout :: popper}" />
+</body>
+
+</html>

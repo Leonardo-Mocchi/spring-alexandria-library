@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 @RequestMapping("/books")
@@ -24,6 +25,8 @@ public class BookController {
 
     @Autowired
     private BookRepository repository;
+
+    // #region READ - GET route
 
     @GetMapping
     public String index(Model model) {
@@ -33,7 +36,9 @@ public class BookController {
         model.addAttribute("books", books);
         return "books/index";
     }
+    // #endregion
 
+    // #region READ - GET > SHOW also with custom filters
     @GetMapping("/{id}") // /books già specifdicato sopra in @RequestMapping!
     public String show(@PathVariable("id") Integer id, Model model) {
 
@@ -61,19 +66,22 @@ public class BookController {
         model.addAttribute("books", books);
         return "books/index";
     }
+    // #endregion
+
+    // #region CREATE - POST route
 
     @GetMapping("/create")
     public String create(Model model) {
 
         model.addAttribute("book", new Book());
-        return "books/create";
+        return "/books/create";
     }
 
     @PostMapping("/create")
     public String store(@Valid @ModelAttribute("book") Book formBook, BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
-            return "books/create";
+            return "/books/create";
         }
 
         // ? salvare il dato
@@ -82,4 +90,28 @@ public class BookController {
         return "redirect:/books";
     }
 
+    // #endregion
+
+    // #region UPDATE -PATCH/PUT route
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable("id") Integer id, Model model) {
+
+        model.addAttribute("book", repository.findById(id).get());
+        return "/books/edit";
+    }
+
+    @PostMapping("/edit/{id}")
+    public String update(@Valid @ModelAttribute("book") Book formBook, BindingResult bindingResult, Model model) {
+
+        if (bindingResult.hasErrors()) {
+            return "/books/edit";
+        }
+
+        // ? aggiornamento del dato
+        repository.save(formBook);
+
+        return "redirect:/books";
+    }
+
+    // #endregion
 }
