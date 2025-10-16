@@ -31,22 +31,22 @@ public class Book {
     // @NotEmpty controlla che la dimensione sia ALMENO superiore a 0 e no NULL
     // @NotNull i valori non possono essere null
 
-    @NotBlank(message = "ISBN must not be null, nor empty or blank")
+    @NotBlank(message = "Title must not be null, nor empty or blank")
     private String title;
 
-    @NotBlank(message = "ISBN must not be null, nor empty or blank")
+    @NotBlank(message = "Author must not be null, nor empty or blank")
     private String author;
 
-    @NotBlank(message = "ISBN must not be null, nor empty or blank")
+    @NotBlank(message = "Publisher must not be null, nor empty or blank")
     private String publisher;
 
     @Lob // > lob = Long OBject
     private String synopsis;
 
-    @NotNull
+    @NotNull(message = "Publication date must not be null")
     private LocalDate publicationDate;
 
-    @NotNull
+    @NotNull(message = "Number of copies must not be null")
     @Min(value = 0, message = "The number of copies cannot be negative")
     private Integer numberOfCopies;
 
