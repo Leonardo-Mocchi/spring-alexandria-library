@@ -5,6 +5,7 @@ import java.util.List;
 import org.lessons.java.spring_alexandria_library.model.Book;
 import org.lessons.java.spring_alexandria_library.model.Borrowing;
 import org.lessons.java.spring_alexandria_library.repository.BookRepository;
+import org.lessons.java.spring_alexandria_library.repository.BorrowingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,19 +20,21 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-@Controller
-@RequestMapping("/books")
+@Controller @RequestMapping("/books")
 public class BookController {
 
     @Autowired
-    private BookRepository repository;
+    private BookRepository bookRepository;
+
+    @Autowired
+    private BorrowingRepository borrowingRepository;
 
     // #region READ - INDEX, PLURAL
 
     @GetMapping
     public String index(Model model) {
 
-        List<Book> books = repository.findAll(); // SELECT * FROM 'books' -> lista oggetti di tipo Book
+        List<Book> books = bookRepository.findAll(); // SELECT * FROM 'books' -> lista oggetti di tipo Book
 
         model.addAttribute("books", books);
         return "books/index";
@@ -42,7 +45,7 @@ public class BookController {
     @GetMapping("/{id}") // /books già specifdicato sopra in @RequestMapping!
     public String show(@PathVariable("id") Integer id, Model model) {
 
-        Book book = repository.findById(id).get();
+        Book book = bookRepository.findById(id).get();
         model.addAttribute("book", book);
         return "books/show";
     }
@@ -50,8 +53,8 @@ public class BookController {
     @GetMapping("/searchByTitle")
     public String searchByTitle(@RequestParam(name = "title") String title, Model model) {
 
-        // List<Book> books = repository.findByTitle(title);
-        List<Book> books = repository.findByTitleContaining(title);
+        // List<Book> books = bookRepository.findByTitle(title);
+        List<Book> books = bookRepository.findByTitleContaining(title);
 
         model.addAttribute("books", books);
         return "books/index";
@@ -60,8 +63,8 @@ public class BookController {
     @GetMapping("/searchByTitleOrAuthor")
     public String searchByTitleOrAuthor(@RequestParam(name = "query") String query, Model model) {
 
-        // List<Book> books = repository.findByTitleOrAuthor(query, query);
-        List<Book> books = repository.findByTitleContainingOrAuthorContaining(query, query);
+        // List<Book> books = bookRepository.findByTitleOrAuthor(query, query);
+        List<Book> books = bookRepository.findByTitleContainingOrAuthorContaining(query, query);
 
         model.addAttribute("books", books);
         return "books/index";
@@ -85,7 +88,7 @@ public class BookController {
         }
 
         // ? salvare il dato
-        repository.save(formBook);
+        bookRepository.save(formBook);
 
         return "redirect:/books";
     }
@@ -96,7 +99,7 @@ public class BookController {
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Integer id, Model model) {
 
-        model.addAttribute("book", repository.findById(id).get());
+        model.addAttribute("book", bookRepository.findById(id).get());
         return "/books/edit";
     }
 
@@ -108,7 +111,7 @@ public class BookController {
         }
 
         // ? aggiornamento del dato
-        repository.save(formBook);
+        bookRepository.save(formBook);
 
         return "redirect:/books";
     }
@@ -116,11 +119,23 @@ public class BookController {
     // #endregion
 
     // #region DELETE - DELETE, permanently remove from the database
-    // , ESSENDO UNA ROTTA POST AVRÒ BISOGNO DI UN FORM !!!
+
+    // ? ESSENDO UNA ROTTA POST AVRÒ BISOGNO DI UN FORM !!!
     @PostMapping("delete/{id}")
     public String delete(@PathVariable("id") Integer id) {
 
-        repository.deleteById(id);
+        // , prendere per ogni libro i prestiti che sono ad esso connessi -> getBorrowings()
+        // * elimali dalla tabella borrowings -> borrowingRepository.delete(borrowing)
+        // >  a questo punto non ho più legami con borrrowings (vincoli di chiave esterna su book id) "book_id" della tabella borrowings
+
+        Book book = bookRepository.findById(id).get();
+
+        /* //, OPZIONALE IN CASO USO IL PARAMETRO CASCADE COME è SCRITTO NELLA ONETOMANY IN BOOK.JAVA
+         for (Borrowing borrowingToDelete : book.getBorrowings()) {
+            borrowingRepository.delete(borrowingToDelete);
+        } */
+
+        bookRepository.delete(book);
 
         return "redirect:/books";
     }
@@ -132,7 +147,7 @@ public class BookController {
 
         Borrowing borrowing = new Borrowing();
 
-        borrowing.setBook(repository.findById(id).get());
+        borrowing.setBook(bookRepository.findById(id).get());
 
         model.addAttribute("borrowing", borrowing);
         return "/borrowings/create-or-edit";

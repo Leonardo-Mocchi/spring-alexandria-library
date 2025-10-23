@@ -3,6 +3,7 @@ package org.lessons.java.spring_alexandria_library.model;
 import java.time.LocalDate;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,12 +17,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-@Entity
-@Table(name = "books") // opzionale il campo tra parentesi in caso la tabella abbia un nome uguale
+@Entity @Table(name = "books") // opzionale il campo tra parentesi in caso la tabella abbia un nome uguale
 public class Book {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // oltre IDENTITY ci sono altri tipi!
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) // oltre IDENTITY ci sono altri tipi!
     private Integer id;
 
     @Size(min = 13, max = 13, message = "ISBN must be 13 characters long") // message aggiungibile ad ogni regola
@@ -48,12 +47,11 @@ public class Book {
     @NotNull(message = "Publication date must not be null")
     private LocalDate publicationDate;
 
-    @NotNull(message = "Number of copies must not be null")
-    @Min(value = 0, message = "The number of copies cannot be negative")
+    @NotNull(message = "Number of copies must not be null") @Min(value = 0, message = "The number of copies cannot be negative")
     private Integer numberOfCopies;
 
     // , aggiunta di una relazione tra UN LIBRO e 0, 1 o più prestiti
-    @OneToMany(mappedBy = "book")
+    @OneToMany(mappedBy = "book", cascade = { CascadeType.REMOVE })
     private List<Borrowing> borrowings;
 
     public List<Borrowing> getBorrowings() {
