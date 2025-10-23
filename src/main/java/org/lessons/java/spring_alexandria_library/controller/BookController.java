@@ -5,7 +5,6 @@ import java.util.List;
 import org.lessons.java.spring_alexandria_library.model.Book;
 import org.lessons.java.spring_alexandria_library.model.Borrowing;
 import org.lessons.java.spring_alexandria_library.repository.BookRepository;
-import org.lessons.java.spring_alexandria_library.repository.BorrowingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,8 +25,8 @@ public class BookController {
     @Autowired
     private BookRepository bookRepository;
 
-    @Autowired
-    private BorrowingRepository borrowingRepository;
+    /* @Autowired
+    private BorrowingRepository borrowingRepository; */
 
     // #region READ - INDEX, PLURAL
 
