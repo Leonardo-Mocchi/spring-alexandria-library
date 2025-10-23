@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="~{fragments/layout :: head}" />
+    <title> Borrow [[${borrowing.book.title}]]
+    </title>
+</head>
+
+<body>
+
+    <th:block th:replace="~{fragments/layout :: navbar('borrowing')}" />
+
+    <main class="container mt-5" th:object="${book}">
+        <section class="row">
+            <div class="col-12">
+                <th:block>
+                    <h1 class="py-4 mb-2 text-center fw-bold">
+                        Borrow "[[${borrowing.getBook().getTitle()}]]" by [[${borrowing.book.author}]]
+                    </h1>
+                    <div class="row justify-content-center">
+                        <div class="col-8">
+
+                            <!-- * form -->
+                            <form id="book-form" th:action="${edit} ? @{|/borrowings/edit/${borrowing.id}|} : @{/borrowings/create}" th:object="${borrowing}" method="post">
+
+                                <!--, "nascondo" qui i dati del mio libro -->
+                                <input type="hidden" th:field="*{book}" id="linked-book">
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="borrowing-date">Borrowing date: </label>
+                                    <input class="form-control" type="date" id="borrowing-date" th:field="*{borrowingDate}" th:errorclass="is-invalid">
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('borrowingDate')}">
+                                        <ul>
+                                            <li th:each="error: ${#fields.errors('borrowingDate')}" th:text="${error}" />
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="return-date">Return date: </label>
+                                    <input class="form-control" type="date" id="return-date" th:field="*{returnDate}" th:errorclass="is-invalid">
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('returnDate')}">
+                                        <ul>
+                                            <li th:each="error: ${#fields.errors('returnDate')}" th:text="${error}" />
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="notes">Notes: </label>
+                                    <textarea id="notes" class="form-control" th:field="*{notes}" th:errorclass="is-invalid"></textarea>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('notes')}">
+                                        <ul>
+                                            <li th:each="error: ${#fields.errors('notes')}" th:text="${error}" />
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <!-- * submit -->
+                                <div class="mb-3 d-flex justify-content-between">
+                                    <input type="submit" class="btn btn-primary" value="Save">
+                                    <input type="reset" class="btn btn-warning" value="Reset all fields">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+        </section>
+
+    </main>
+    <th:block th:replace=" ~{fragments/layout :: popper}" />
+</body>
+
+</html>

@@ -34,8 +34,8 @@
                             <th>Publisher</th>
                             <th>Date</th>
                             <th>Copies</th>
-                            <td></td>
-                            <td></td>
+                            <th></th>
+                            <th></th>
                             <th></th>
                         </tr>
                     </thead>
@@ -47,6 +47,10 @@
                             <td>[[*{publisher}]]</td>
                             <td>[[*{publicationDate}]]</td>
                             <td>[[*{numberOfCopies}]]</td>
+                            <td>
+                                <a class="btn btn-dark btn-sm" th:href="@{/books/{id}/borrow (id=*{id})}">Borrow</a>
+
+                            </td>
                             <td>
                                 <a class="btn btn-primary btn-sm" th:href="@{/books/{id}(id=*{id})}">Show</a>
                             </td>

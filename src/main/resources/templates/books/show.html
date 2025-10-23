@@ -32,6 +32,83 @@
             </div>
         </section>
 
+        <section class="row mb-3 borrowings">
+            <div class="col-12" th:if="${book.getBorrowings().size() > 0}">
+                <h2 class="fw-bold">Borrowings for this book:</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Borrowing N°</th>
+                            <th>Borrowing Date</th>
+                            <th>Return Date</th>
+                            <th>Notes</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="borrowing : *{borrowings}">
+                            <td>[[${borrowing.id}]]</td>
+                            <td>[[${borrowing.borrowingDate}]]</td>
+                            <td th:if="${borrowing.returnDate != null}">[[${borrowing.returnDate}]]</td>
+                            <td th:unless="${borrowing.returnDate != null}" class="text-danger">Not Returned Yet</td>
+                            <td>[[${borrowing.notes}]]</td>
+
+                            <td>
+                                <a class="btn btn-success btn-sm" th:href="@{|/borrowings/edit/${borrowing.id}|}">Edit</a>
+                            </td>
+                            <!--<td>
+                                <a class="btn btn-dark btn-sm" th:href="@{/books/{id}/borrow (id=*{id})}">Borrow</a>
+
+                            </td>
+                             <td>
+                                <a class="btn btn-primary btn-sm" th:href="@{/books/{id}(id=*{id})}">Show</a>
+                            </td>
+                            <!--, delete
+                             <td> 
+                                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" th:data-bs-target="'#delete-modal-' + *{id}">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                                <div class="modal fade" th:id="'delete-modal-' + *{id}" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="delete-modal" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title" id="modalTitleId">
+                                                    Deleting "[[*{title}]]"
+                                                </h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure you want to delete the book with title <strong>"[[*{title}]]"</strong>?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <form class="d-inline-block" th:action="@{/books/delete/{id}(id=*{id})}" method="post">
+                                                    <button class="btn btn-danger" type="submit">
+                                                        Permanently delete this Book
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> -->
+
+                            <!-- Optional: Place to the bottom of scripts -->
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="col-12 " th:unless="${book.getBorrowings().size() > 0}">
+                <div class="alert alert-warning">
+                    <h2>There is no Borrowing History for this book yet</h2>
+                </div>
+            </div>
+        </section>
+
+
+
     </main>
     <th:block th:replace=" ~{fragments/layout :: popper}" />
 </body>
