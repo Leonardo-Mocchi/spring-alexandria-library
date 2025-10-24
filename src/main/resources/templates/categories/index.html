@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="~{fragments/layout :: head}"></th:block>
+    <title>Categories</title>
+</head>
+
+<body>
+
+    <th:block th:replace="~{fragments/layout :: navbar('categories')}"></th:block>
+
+    <main class="container">
+        <h1>Categories</h1>
+
+        <hr>
+
+        <div class="mb-3 d-flex">
+            <a th:href="@{/categories/create}" class="me-auto btn btn-primary btn-sm">
+                Create a new category
+            </a>
+        </div>
+
+        <section class="row">
+            <div class="col-12">
+                <table class="table" th:if="${categories.size() > 0}">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Number of Books</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="category : ${categories}" th:object="${category}">
+                            <td>[[*{id}]]</td>
+                            <td>[[*{name}]]</td>
+                            <td>[[*{books.size()}]]</td>
+                            <td>
+                                <a class="btn btn-primary btn-sm" th:href="@{/categories/{id}(id=*{id})}">Show</a>
+                            </td>
+                            <td>
+                                <a class="btn btn-success btn-sm" th:href="@{/categories/edit/{id}(id=*{id})}">Edit</a>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" th:data-bs-target="'#delete-modal-' + *{id}">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+
+                                <div class="modal fade" th:id="'delete-modal-' + *{id}" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="delete-modal" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title" id="modalTitleId">
+                                                    Deleting "[[*{name}]]"
+                                                </h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure you want to delete the Category with name <strong>"[[*{name}]]"</strong>?
+                                            </div>
+                                            <div class="modal-footer">
+
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                                                <form class="d-inline-block" th:action="@{/categories/delete/{id}(id=*{id})}" method="post">
+                                                    <button class="btn btn-danger" type="submit">
+                                                        Permanently delete this category
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+                <p th:unless="${categories.size() > 0}" th:text="'No categories are available at the moment...'"></p>
+            </div>
+
+        </section>
+
+
+    </main>
+
+    <th:block th:replace=" ~{fragments/layout :: popper}">
+    </th:block>
+</body>
+
+</html>

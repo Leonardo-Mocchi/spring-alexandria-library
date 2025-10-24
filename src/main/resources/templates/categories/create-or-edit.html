@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="~{fragments/layout :: head}" />
+    <title th:if="${edit}"> Category [[${category.name}]] </title>
+    <title th:unless="${edit}"> Category Creation </title>
+</head>
+
+<body>
+
+    <th:block th:replace="~{fragments/layout :: navbar('category')}" />
+
+    <main class="container mt-5" th:object="${category}">
+        <section class="row">
+            <div class="col-12">
+                <th:block>
+                    <h1 th:if="${edit}" class="py-4 mb-2 text-center fw-bold">
+                        Editing Category: "[[${category.name}]]"
+                    </h1>
+                    <h1 th:unless="${edit}" class="py-4 mb-2 text-center fw-bold">
+                        Creating a new Category
+                    </h1>
+
+
+                    <div class="row justify-content-center">
+                        <div class="col-8">
+
+                            <!-- * form -->
+                            <form id="category-form" th:action="${edit} ? @{|/categories/edit/${category.id}|} : @{/categories/create}" th:object="${category}" method="post">
+
+                                <!--, "nascondo" qui i dati del mio libro -->
+                                <input type="hidden" th:field="${category}" id="linked-category">
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="name">Name: </label>
+                                    <input class="form-control" type="text" id="name" th:field="*{name}" th:errorclass="is-invalid">
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}">
+                                        <ul>
+                                            <li th:each="error: ${#fields.errors('name')}" th:text="${error}" />
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="description">Description: </label>
+                                    <textarea id="description" class="form-control" th:field="*{description}" th:errorclass="is-invalid" placeholder="Thriller..."></textarea>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('description')}">
+                                        <ul>
+                                            <li th:each="error: ${#fields.errors('description')}" th:text="${error}" />
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <!-- * submit -->
+                                <div class="mb-3 d-flex justify-content-between">
+                                    <input type="submit" class="btn btn-primary" value="Save">
+                                    <input type="reset" class="btn btn-warning" value="Reset all fields">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+        </section>
+
+    </main>
+    <th:block th:replace=" ~{fragments/layout :: popper}" />
+</body>
+
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="~{fragments/layout :: head}" />
+    <title>Category: [[${category.name}]]</title>
+</head>
+
+<body>
+
+    <th:block th:replace="~{fragments/layout :: navbar('categories')}" />
+
+    <main class="container mt-5" th:object="${category}">
+        <h1>Category: [[${category.name}]]</h1>
+        <hr>
+
+        <section class="row mb-3">
+            <div class="col-12">
+                <h1 class=" fw-bold mb-3">[[*{name}]]</h1>
+                <p class="mb-3">Books in this Category: [[*{books.size()}]]</p>
+                <hr>
+                <p class="mb-3">[[*{description}]]</p>
+
+            </div>
+        </section>
+    </main>
+    <th:block th:replace=" ~{fragments/layout :: popper}" />
+</body>
+
+</html>

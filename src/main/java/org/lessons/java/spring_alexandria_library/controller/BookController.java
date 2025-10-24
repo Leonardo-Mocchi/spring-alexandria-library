@@ -5,6 +5,7 @@ import java.util.List;
 import org.lessons.java.spring_alexandria_library.model.Book;
 import org.lessons.java.spring_alexandria_library.model.Borrowing;
 import org.lessons.java.spring_alexandria_library.repository.BookRepository;
+import org.lessons.java.spring_alexandria_library.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,11 +20,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-@Controller @RequestMapping("/books")
+@Controller
+@RequestMapping("/books")
 public class BookController {
 
     @Autowired
     private BookRepository bookRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     /* @Autowired
     private BorrowingRepository borrowingRepository; */
@@ -76,6 +81,7 @@ public class BookController {
     public String create(Model model) {
 
         model.addAttribute("book", new Book());
+        model.addAttribute("categories", categoryRepository.findAll());
         return "/books/create";
     }
 
@@ -83,6 +89,8 @@ public class BookController {
     public String store(@Valid @ModelAttribute("book") Book formBook, BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
+
+            model.addAttribute("categories", categoryRepository.findAll());
             return "/books/create";
         }
 
@@ -98,6 +106,8 @@ public class BookController {
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Integer id, Model model) {
 
+        model.addAttribute("categories", categoryRepository.findAll());
+
         model.addAttribute("book", bookRepository.findById(id).get());
         return "/books/edit";
     }
@@ -106,6 +116,8 @@ public class BookController {
     public String update(@Valid @ModelAttribute("book") Book formBook, BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
+
+            model.addAttribute("categories", categoryRepository.findAll());
             return "/books/edit";
         }
 
@@ -123,16 +135,21 @@ public class BookController {
     @PostMapping("delete/{id}")
     public String delete(@PathVariable("id") Integer id) {
 
-        // , prendere per ogni libro i prestiti che sono ad esso connessi -> getBorrowings()
+        // , prendere per ogni libro i prestiti che sono ad esso connessi ->
+        // getBorrowings()
         // * elimali dalla tabella borrowings -> borrowingRepository.delete(borrowing)
-        // >  a questo punto non ho più legami con borrrowings (vincoli di chiave esterna su book id) "book_id" della tabella borrowings
+        // > a questo punto non ho più legami con borrrowings (vincoli di chiave esterna
+        // su book id) "book_id" della tabella borrowings
 
         Book book = bookRepository.findById(id).get();
 
-        /* //, OPZIONALE IN CASO USO IL PARAMETRO CASCADE COME è SCRITTO NELLA ONETOMANY IN BOOK.JAVA
-         for (Borrowing borrowingToDelete : book.getBorrowings()) {
-            borrowingRepository.delete(borrowingToDelete);
-        } */
+        /*
+         * //, OPZIONALE IN CASO USO IL PARAMETRO CASCADE COME è SCRITTO NELLA ONETOMANY
+         * IN BOOK.JAVA
+         * for (Borrowing borrowingToDelete : book.getBorrowings()) {
+         * borrowingRepository.delete(borrowingToDelete);
+         * }
+         */
 
         bookRepository.delete(book);
 
