@@ -1,8 +1,7 @@
 package org.lessons.java.spring_alexandria_library.controller;
 
-import org.lessons.java.spring_alexandria_library.model.Book;
 import org.lessons.java.spring_alexandria_library.model.Category;
-import org.lessons.java.spring_alexandria_library.repository.CategoryRepository;
+import org.lessons.java.spring_alexandria_library.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,20 +19,20 @@ import jakarta.validation.Valid;
 public class CategoryController {
 
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryService categoryService;
 
     // * INDEX
     @GetMapping
     public String index(Model model) {
 
-        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("categories", categoryService.findAll());
         return "categories/index";
     }
 
     // * SHOW
     @GetMapping("/{id}")
     public String show(@PathVariable Integer id, Model model) {
-        model.addAttribute("category", categoryRepository.findById(id).get());
+        model.addAttribute("category", categoryService.getById(id));
         return "categories/show";
     }
 
@@ -53,7 +52,7 @@ public class CategoryController {
         if (bindingResult.hasErrors()) {
             return "categories/create-or-edit";
         }
-        categoryRepository.save(formCategory);
+        categoryService.create(formCategory);
         return "redirect:/categories";
     }
 
@@ -61,7 +60,7 @@ public class CategoryController {
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable Integer id, Model model) {
 
-        model.addAttribute("category", categoryRepository.findById(id).get());
+        model.addAttribute("category", categoryService.getById(id));
         model.addAttribute("edit", true);
         return "categories/create-or-edit";
     }
@@ -74,7 +73,7 @@ public class CategoryController {
         if (bindingResult.hasErrors()) {
             return "categories/create-or-edit";
         }
-        categoryRepository.save(formCategory);
+        categoryService.update(formCategory);
         return "redirect:/categories";
     }
 
@@ -84,13 +83,8 @@ public class CategoryController {
 
         // , cancellare una categoria -> book.getCategories().remove(category)
         // , importante per rimuovere ogni traccia della category salavata nella tabella pivot "book_category"
-        Category categoryToDelete = categoryRepository.findById(id).get();
-
-        for (Book linkedBook : categoryToDelete.getBooks()) {
-            linkedBook.getCategories().remove(categoryToDelete);
-        }
-
-        categoryRepository.delete(categoryToDelete);
+        // deletion logic (including unlinking books) is handled in the service
+        categoryService.deleteById(id);
 
         return "redirect:/categories";
     }
