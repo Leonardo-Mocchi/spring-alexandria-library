@@ -1,7 +1,7 @@
 package org.lessons.java.spring_alexandria_library.controller;
 
 import org.lessons.java.spring_alexandria_library.model.Borrowing;
-import org.lessons.java.spring_alexandria_library.repository.BorrowingRepository;
+import org.lessons.java.spring_alexandria_library.service.BorrowingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class BorrowingController {
 
     @Autowired
-    private BorrowingRepository repository;
+    private BorrowingService service;
 
     @PostMapping("/create")
     public String store(@Valid @ModelAttribute("borrowing") Borrowing formBorrowing, BindingResult bindingresult,
@@ -30,7 +30,7 @@ public class BorrowingController {
             return "/borrowings/create-or-edit";
         }
 
-        repository.save(formBorrowing);
+        service.create(formBorrowing);
 
         return "redirect:/books/" + formBorrowing.getBook().getId();
     }
@@ -39,7 +39,7 @@ public class BorrowingController {
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Integer id, Model model) {
 
-        model.addAttribute("borrowing", repository.findById(id).get());
+        model.addAttribute("borrowing", service.getById(id));
         model.addAttribute("edit", true);
         return "borrowings/create-or-edit";
     }
@@ -53,7 +53,7 @@ public class BorrowingController {
             return "/borrowings/create-or-edit";
         }
 
-        repository.save(formBorrowing);
+        service.update(formBorrowing);
 
         return "redirect:/books/" + formBorrowing.getBook().getId();
 

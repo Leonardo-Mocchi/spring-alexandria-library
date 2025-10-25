@@ -9,10 +9,10 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
 
     // public List<Book> findByTitle(String title);
 
-    public List<Book> findByTitleContaining(String title);
+    public List<Book> findByTitleContainingIgnoreCase(String title);
 
     // public List<Book> findByTitleOrAuthor(String title, String author);
 
-    public List<Book> findByTitleContainingOrAuthorContaining(String title, String author);
+    public List<Book> findByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(String title, String author);
 
 }
