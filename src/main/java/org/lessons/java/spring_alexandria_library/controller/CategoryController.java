@@ -81,9 +81,6 @@ public class CategoryController {
     @PostMapping("delete/{id}")
     public String delete(@PathVariable Integer id) {
 
-        // , cancellare una categoria -> book.getCategories().remove(category)
-        // , importante per rimuovere ogni traccia della category salavata nella tabella pivot "book_category"
-        // deletion logic (including unlinking books) is handled in the service
         categoryService.deleteById(id);
 
         return "redirect:/categories";

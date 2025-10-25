@@ -52,6 +52,9 @@ public class CategoryService {
 
     public void delete(Category category) {
 
+        // , cancellare una categoria -> book.getCategories().remove(category)
+        // , importante per rimuovere ogni traccia della category salavata nella tabella pivot "book_category"
+
         // Remove this category from any linked books to avoid constraint issues
         if (category.getBooks() != null) {
             for (Book linkedBook : category.getBooks()) {
