@@ -27,6 +27,11 @@ public class BookService {
         return bookRepository.findAll(Sort.by("author"));
     }
 
+    //, per Book Rest Advanced Controller
+    public Optional<Book> findById(Integer id) {
+        return bookRepository.findById(id);
+    }
+
     public Book getById(Integer id) {
 
         //? gestire casistica in cui non viene trovata la risorsa

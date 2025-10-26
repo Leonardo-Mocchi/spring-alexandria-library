@@ -1,6 +1,7 @@
 package org.lessons.java.spring_alexandria_library.model;
 
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,6 +29,7 @@ public class Category {
     private String description;
 
     @ManyToMany(mappedBy = "categories")
+    @JsonIgnore
     private List<Book> books;
 
     public List<Book> getBooks() {
