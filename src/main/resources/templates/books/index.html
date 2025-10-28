@@ -16,9 +16,10 @@
         <hr>
 
         <div class="mb-3 d-flex">
-            <a th:href="@{/books/create}" class="me-auto btn btn-primary btn-sm">
+            <a th:href="@{/books/create}" class="me-auto btn btn-primary btn-sm" sec:authorize="hasAuthority('ADMIN')">
                 Add a Book to the Archive
             </a>
+            <h3 th:text="'Ciao ' + ${username}" />
         </div>
 
         <!-- <p th:text="${books}"></p> // .toString() automatico quando specificato nel model-->
@@ -35,8 +36,8 @@
                             <th>Date</th>
                             <th>Copies</th>
                             <th></th>
-                            <th></th>
-                            <th></th>
+                            <th sec:authorize="hasAuthority('ADMIN')"></th>
+                            <th sec:authorize="hasAuthority('ADMIN')"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -54,10 +55,10 @@
                             <td>
                                 <a class="btn btn-primary btn-sm" th:href="@{/books/{id}(id=*{id})}">Show</a>
                             </td>
-                            <td>
+                            <td sec:authorize="hasAuthority('ADMIN')">
                                 <a class="btn btn-success btn-sm" th:href="@{/books/edit/{id}(id=*{id})}">Edit</a>
                             </td>
-                            <td>
+                            <td sec:authorize="hasAuthority('ADMIN')">
                                 <!--? Form senza modale,con semplice "bottone"  
                                 <form th:action="@{/books/delete/{id}(id=*{id})}" method="post" style="display:inline">
                                     <button class="btn btn-danger btn-sm" type="submit">
