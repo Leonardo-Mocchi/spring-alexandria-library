@@ -24,7 +24,8 @@ public class SecurityConfiguration {
                 .requestMatchers("/**").permitAll()
                 .and().formLogin()
                 .and().logout()
-                .and().exceptionHandling();
+                .and().exceptionHandling()
+                .and().csrf().disable(); //! SOLO IN FASE DI TESTING
 
         return http.build();
     }
